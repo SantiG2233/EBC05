@@ -6,24 +6,29 @@
 
 
 #include <Arduino_FreeRTOS.h>
-#include <coop_threads.h>
-#include <coop_config.h>
 #include <SD.h>
 #include <SPI.h>
 File RaceData;
-int SDpinCS = 53; // Pin 10 on Arduino Uno
-int green = 4;
-int red = 5;
+int SDpinCS = 53;
+int green = 14;
+int red = 15;
 
 //RTOS
 void SD_write(void* parameter);
+TaskHandle_t Task1;
 
 void setup() {
 
     Serial.begin(9600);
     pinMode(SDpinCS, OUTPUT);
 
-    
+    xTaskCreate(
+        SD_write,
+        "SD_data_login",
+        1000,
+        NULL,
+        1,
+        &Task1);
 
     // SD Card Initialization
     if (SD.begin())
@@ -44,14 +49,27 @@ void loop() {
 void SD_write(void* parameeter) {
     RaceData = SD.open("Data.txt", FILE_WRITE);
     if (RaceData) {
+        // Ejemplo de escritura de datos en SD
         //RaceData.print(rtc.getTimeStr());
-        RaceData.print(",");
-        //RaceData.println(int(rtc.getTemp()));
-        RaceData.close(); // close the file
+        //RaceData.print(",");
+        //RaceData.print(int(rtc.getTemp()));
+        //RaceData.print(",");
+        //RaceData.print(velocidad);
+        //RaceData.print(",");
+        //RaceData.print(voltaje);
+        //RaceData.print(",");
+        //RaceData.print(corriente);
+        //RaceData.print(",");
+        //RaceData.println(distancia);
+        //RaceData.close(); // close the file
     }
-    // if the file didn't open, print an error:
+    // if the file didn't open, blinking red LED
     else {
+        while (true);
         digitalWrite(red, HIGH);
+        delay(1000);
+        digitalWrite(red, LOW);
+        delay(1000);
     }
     delay(250);
 }
