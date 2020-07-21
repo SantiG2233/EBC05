@@ -12,6 +12,10 @@ File RaceData;
 int SDpinCS = 53;
 int green = 14;
 int red = 15;
+int HallSensor = 3;
+int MaxRPM = 8000;
+int rpmmaximum = 0;
+int RaceTime = 3600000
 
 //RTOS
 void SD_write(void* parameter);
@@ -19,8 +23,10 @@ TaskHandle_t Task1;
 
 void setup() {
 
-    Serial.begin(9600);
     pinMode(SDpinCS, OUTPUT);
+    pinMode(HallSensor, INPUT);
+    Serial.begin(9600);
+    
 
     xTaskCreate(
         SD_write,
@@ -46,22 +52,20 @@ void loop() {
  
 }
 
-void SD_write(void* parameeter) {
+void SD_write(void* parameter) {
     RaceData = SD.open("Data.txt", FILE_WRITE);
     if (RaceData) {
         // Ejemplo de escritura de datos en SD
         //RaceData.print(rtc.getTimeStr());
         //RaceData.print(",");
-        //RaceData.print(int(rtc.getTemp()));
-        //RaceData.print(",");
-        //RaceData.print(velocidad);
-        //RaceData.print(",");
+        RaceData.print(int(getRPM()));  // writes RPM measures in the SD card
+        RaceData.print(",");
         //RaceData.print(voltaje);
         //RaceData.print(",");
         //RaceData.print(corriente);
         //RaceData.print(",");
         //RaceData.println(distancia);
-        //RaceData.close(); // close the file
+        RaceData.close(); // close the file
     }
     // if the file didn't open, blinking red LED
     else {
@@ -72,4 +76,27 @@ void SD_write(void* parameeter) {
         delay(1000);
     }
     delay(250);
+}
+
+int getRPM()
+{
+    int count = 0;
+    boolean countFlag = LOW;
+    unsigned long currentTime = 0;
+    unsigned long startTime = millis();
+    while (currentTime <= RaceTime)
+    {
+        if (digitalRead(HallSensor) == HIGH)
+        {
+            countFlag = HIGH;
+        }
+        if (digitalRead(HallSensor) == LOW && countFlag == HIGH)
+        {
+            count++;
+            countFlag = LOW;
+        }
+        currentTime = millis() - startTime;
+    }
+    int countRpm = int(60000 / float(RaceTime)) * count;
+    return countRpm;
 }
