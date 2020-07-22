@@ -15,7 +15,31 @@ int red = 15;
 int HallSensor = 3;
 int MaxRPM = 8000;
 int rpmmaximum = 0;
-int RaceTime = 3600000
+int RaceTime = 3600000;
+
+//General Variable/Function to obtain RPM´s 
+int getRPM()
+{
+    int count = 0;
+    boolean countFlag = LOW;
+    unsigned long currentTime = 0;
+    unsigned long startTime = millis();
+    while (currentTime <= RaceTime)
+    {
+        if (digitalRead(HallSensor) == HIGH)
+        {
+            countFlag = HIGH;
+        }
+        if (digitalRead(HallSensor) == LOW && countFlag == HIGH)
+        {
+            count++;
+            countFlag = LOW;
+        }
+        currentTime = millis() - startTime;
+    }
+    int countRpm = int(60000 / float(RaceTime)) * count;
+    return countRpm;
+}
 
 //RTOS
 void SD_write(void* parameter);
@@ -52,6 +76,7 @@ void loop() {
  
 }
 
+// Loop used to write all data on the SD card to post-race analysis
 void SD_write(void* parameter) {
     RaceData = SD.open("Data.txt", FILE_WRITE);
     if (RaceData) {
@@ -78,25 +103,3 @@ void SD_write(void* parameter) {
     delay(250);
 }
 
-int getRPM()
-{
-    int count = 0;
-    boolean countFlag = LOW;
-    unsigned long currentTime = 0;
-    unsigned long startTime = millis();
-    while (currentTime <= RaceTime)
-    {
-        if (digitalRead(HallSensor) == HIGH)
-        {
-            countFlag = HIGH;
-        }
-        if (digitalRead(HallSensor) == LOW && countFlag == HIGH)
-        {
-            count++;
-            countFlag = LOW;
-        }
-        currentTime = millis() - startTime;
-    }
-    int countRpm = int(60000 / float(RaceTime)) * count;
-    return countRpm;
-}
