@@ -17,6 +17,9 @@
 #include <ETH.h>
 
 
+//***********************************
+//*********** DEFINITIONS ***********
+//***********************************
 
 //***********************************
 //*********** MQTT CONFIG ***********
@@ -32,12 +35,12 @@ const char *root_topic_publish = "";
 //***********************************
 //*********** WIFI CONFIG ***********
 //***********************************
-const char* ssid = "";
-const char* password = "";
+const char* ssid = "angeleivan";
+const char* password = "2805042113";
 
 
 //***********************************
-//************* GLOBALES ************
+//************* GLOBALS *************
 //***********************************
 WiFiClient esp;
 PubSubClient client(esp);
@@ -46,9 +49,9 @@ long count = 0;
 
 
 //***********************************
-//*************** RTSO **************
+//*************** RTOS **************
 //***********************************
-TaskHandle_t Task1;
+TaskHandle_t Task1,Task2;
 
 
 //***********************************
@@ -57,10 +60,34 @@ TaskHandle_t Task1;
 void callback(char* topic, byte* payload, unsigned int length);
 void reconnect();
 void setup_wifi();
-void loop1(void* parameter);
+void wifiLoop(void* parameter);
 
 
+//***********************************
+//************** SETUP **************
+//***********************************
 void setup() {
+
+	xTaskCreatePinnedToCore(
+		wifiLoop, // Función elegida
+		"Task 1", 
+		1000, // Stack
+		NULL, // No parameters
+		1, // Priority
+		&Task1, // Created Task
+		0 // Core
+	);
+	
+	xTaskCreatePinnedToCore(
+		GPS, // Función elegida
+		"Task 2",
+		1000, // Stack
+		NULL, // No parameters
+		1, // Priority
+		&Task2, // Created Task
+		0 // Core
+	);
+
 	setup_wifi();
 	client.setServer(mqtt_server, mqtt_port);
 	client.setCallback(callback);
@@ -68,28 +95,38 @@ void setup() {
 	Serial.begin(115200);
 }
 
-void loop1(void* parameter) { // Corre en el Núcleo 0
+
+//***********************************
+//************** LOOPS **************
+//***********************************
+// Connection with server
+void wifiLoop(void* parameter) {
 	for (;;) {
+		if (!client.connected()) {
+			reconnect();
+		}
 
+		if (client.connected()) {
+			String str = "La cuenta es ->" + String(count);
+			str.toCharArray(msg, 25);
+			client.publish(root_topic_publish, msg);
+			count++;
+			delay(300);
+		}
+
+		client.loop();
 	}
 
+	vTaskDelay(10);
 }
 
-void loop() { // Corre en el Núcleo 1 (Principal)
+
+// Communication with Arduino Mega
+void loop() {
 	
-	if (!client.connected()) {
-		reconnect();
-	}
-
-	if (client.connected()) {
-		String str = "La cuenta es ->" + String(count);
-		str.toCharArray(msg, 25);
-		client.publish(root_topic_publish, msg);
-		count++;
-		delay(300);
-	}
-	client.loop();
+	
 }
+
 
 //***********************************
 //*********** WIFI CONNECT **********
@@ -159,3 +196,4 @@ void reconnect() {
 		}
 	}
 }
+

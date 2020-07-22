@@ -5,7 +5,29 @@ VisualStudioVersion = 16.0.30225.117
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Dos_núcleos", "Dos_núcleos.vcxproj", "{C5F80730-F44F-4478-BDAE-6634EFC2CA88}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ESP32-1.0", "Libraries\ESP32\1.0\ESP32\ESP32-1.0.vcxitems", "{ACAB06F6-D1B5-4DAF-ADD9-2B95FEE58E4D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SPI-1.0", "Libraries\SPI\1.0\SPI\SPI-1.0.vcxitems", "{FA5CC6F2-704F-472F-83DF-EBE3B9890A0C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SD-1.0.5", "Libraries\SD\1.0.5\SD\SD-1.0.5.vcxitems", "{DB0FEDC7-8761-4C5F-A147-1378EA6AB4A1}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SD_MMC-1.0", "Libraries\SD_MMC\1.0\SD_MMC\SD_MMC-1.0.vcxitems", "{F5E36CCA-5320-42A4-9041-C992B848049A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FS-1.0", "Libraries\FS\1.0\FS\FS-1.0.vcxitems", "{96B5ACB6-193A-4764-854F-F23B8B38A95A}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Libraries\FS\1.0\FS\FS-1.0.vcxitems*{96b5acb6-193a-4764-854f-f23b8b38a95a}*SharedItemsImports = 9
+		Libraries\ESP32\1.0\ESP32\ESP32-1.0.vcxitems*{acab06f6-d1b5-4daf-add9-2b95fee58e4d}*SharedItemsImports = 9
+		Libraries\ESP32\1.0\ESP32\ESP32-1.0.vcxitems*{c5f80730-f44f-4478-bdae-6634efc2ca88}*SharedItemsImports = 4
+		Libraries\FS\1.0\FS\FS-1.0.vcxitems*{c5f80730-f44f-4478-bdae-6634efc2ca88}*SharedItemsImports = 4
+		Libraries\SD\1.0.5\SD\SD-1.0.5.vcxitems*{c5f80730-f44f-4478-bdae-6634efc2ca88}*SharedItemsImports = 4
+		Libraries\SD_MMC\1.0\SD_MMC\SD_MMC-1.0.vcxitems*{c5f80730-f44f-4478-bdae-6634efc2ca88}*SharedItemsImports = 4
+		Libraries\SPI\1.0\SPI\SPI-1.0.vcxitems*{c5f80730-f44f-4478-bdae-6634efc2ca88}*SharedItemsImports = 4
+		Libraries\SD\1.0.5\SD\SD-1.0.5.vcxitems*{db0fedc7-8761-4c5f-a147-1378ea6ab4a1}*SharedItemsImports = 9
+		Libraries\SD_MMC\1.0\SD_MMC\SD_MMC-1.0.vcxitems*{f5e36cca-5320-42a4-9041-c992b848049a}*SharedItemsImports = 9
+		Libraries\SPI\1.0\SPI\SPI-1.0.vcxitems*{fa5cc6f2-704f-472f-83df-ebe3b9890a0c}*SharedItemsImports = 9
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
 		Release|x86 = Release|x86
