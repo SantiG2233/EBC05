@@ -24,12 +24,12 @@
 //***********************************
 //*********** MQTT CONFIG ***********
 //***********************************
-const char *mqtt_server = "";
+const char *mqtt_server = "ioticos.org";
 const int mqtt_port = 1883;
-const char *mqtt_user = "";
-const char *mqtt_pass = "";
-const char *root_topic_subscribe = "";
-const char *root_topic_publish = "";
+const char *mqtt_user = "VjclYKIMveCXbG0";
+const char *mqtt_pass = "2xAfdxh1sV7owRE";
+const char *root_topic_subscribe = "Fb91eInFO93GxEe";
+const char *root_topic_publish = "Fb91eInFO93GxEe";
 
 
 //***********************************
@@ -78,6 +78,7 @@ void setup() {
 		0 // Core
 	);
 	
+	/*
 	xTaskCreatePinnedToCore(
 		GPS, // Función elegida
 		"Task 2",
@@ -87,6 +88,7 @@ void setup() {
 		&Task2, // Created Task
 		0 // Core
 	);
+	*/
 
 	setup_wifi();
 	client.setServer(mqtt_server, mqtt_port);
@@ -111,7 +113,7 @@ void wifiLoop(void* parameter) {
 			str.toCharArray(msg, 25);
 			client.publish(root_topic_publish, msg);
 			count++;
-			delay(300);
+			delay(1000);
 		}
 
 		client.loop();
