@@ -143,41 +143,56 @@ void errorCode(void* parameter) {
 	for (;;) {
 		state = pulseIn(colorOut, HIGH);
 
-		if (state >= 500 && state <= 600) {
-			countY += 1;
+		if (state >= 700 && state <= 800) { // RED
 
-			if (color != R && countY > 9) {
+			if (color == Y && ind == 0) { // First step
+				// countR = 1;
+				ind = 1;
+			}
+
+			if (color == Y && ind == 1) { // Second step
+				ind = 2;
+				dec = countY;
 				countY = 0;
 			}
 
-			else if (color == R)
-				ind = 1;
-
-			else if (color == Y && ind == 1) {
-
+			else if (color == R && ind == 2) { // Third step
+				ind = 3;
 			}
 
-			else
-				color = Y;
-		}
-
-		else if (state >= 700 && state <= 800) {
-
-			if (color == Y && ind == 0) {
-				countR = 1;
+			else if (color == Y && ind == 3) { // Restart
 				ind = 1;
-			}
+				uni = countY;
+				countY = 0;
 
-			else if (color == R && ind == 1) {
-				countR = 2;
-				dec = countY;
+				find_code();
 			}
 
 			color = R;
 		}
 
-		else if (state >= 100 && state <= 200) {
-			color = B;
+		else if (state >= 500 && state <= 600) { // YELLOW
+
+			if (ind == 1) {
+				countY += 1;
+			}
+
+			if (ind == 3) {
+				countY += 1;
+			}
+
+			else if (color != R && countY > 9) {
+				countY = 0;
+			}
+
+			else if (color == R && ind == 2)
+				ind = 1;
+
+			color = Y;
+		}
+
+		else if (state >= 100 && state <= 200) { // OFF
+			continue;
 		}
 	}
 
@@ -266,8 +281,12 @@ void reconnect() {
 //***********************************
 void find_code() {
 
-	countY = 0;
-	countY = 0;
+	String d = (String)dec;
+	String u = (String)uni;
+
+	String code = d + u;
+
+	num = code.toInt();
 
 	switch (num) {
 	case 12:;
