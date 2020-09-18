@@ -76,7 +76,7 @@ void setup() {
     "SD_data_login",
     1000, //Se necesita comprobar el dato 
     NULL,
-    2,
+    1,
     &Task2
     );
   
@@ -85,7 +85,7 @@ void setup() {
     "Operacion_sensor_corriente",
     1000, //Se necesita comprobar el dato 
     NULL,
-    3,
+    1,
     &Task3
     );
     
@@ -155,6 +155,12 @@ void SD_write(void* parameter){
 //Sensor voltaje 
 void Sensor_Voltaje(void *parameter){
   for(;;){
-    
+  int sensorValue = analogRead(A0); // 
+  float voltageA = sensorValue * (5.0 / 1023.0); //Conversion a voltajes en una escala de 5v 
+  float voltageF= voltageA*(48/1.66); //Conversion al voltaje real de la pila (quitar 1.6) 
+  Serial.print("Voltage =");
+  Serial.print(voltageF);
+  Serial.printlin("+- 0.5");
+  delay(500);
   } 
 }
